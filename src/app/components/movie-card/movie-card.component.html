@@ -1,0 +1,14 @@
+<mat-card
+  appearance='outlined'
+  class="movie-card"
+>
+  <mat-card-header>
+    <mat-card-title>{{ movie?.title }}</mat-card-title>
+    <mat-card-subtitle>id: {{ movie?.id }}</mat-card-subtitle>
+  </mat-card-header>
+  <img [src]="movie?.imageURI" height="400" />
+  <mat-card-content [ngStyle]="{'min-height': '65px'}"><p>{{ movie?.description }}</p></mat-card-content>
+  <mat-card-actions align="end">
+    <a mat-button [routerLink]="['/movies', movie?.id]">Details</a>
+  </mat-card-actions>
+</mat-card>
