@@ -1,14 +1,4 @@
-<div class="movies-page" style="padding: 10vw;">
-  <div class="movie-list">
-    <cdk-virtual-scroll-viewport class="movie-list-container" itemSize="10" style="height: 100vh;width: 100%;overflow: auto;">
-      <div style="display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 10px;">
-        <app-movie-card *cdkVirtualFor="let movie of movies" [movie]="movie" />
-      </div>
-      <!-- using for -->
-      <!-- <app-movie-card [movie]="movie" *ngFor="let movie of movies" /> -->
-    </cdk-virtual-scroll-viewport>
-  </div>
+<div class="movies-page">
+  <app-movie-list />
 </div>
 

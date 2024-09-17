@@ -1,0 +1,10 @@
+<div class="movie-list">
+  <span *ngIf="loading | async; else moviesTemplate" >loading movies...</span>
+  <ng-template #moviesTemplate>
+    <cdk-virtual-scroll-viewport class="movie-list-container" itemSize="10">
+      <div class="movie-list-container-grid">
+        <app-movie-card *cdkVirtualFor="let movie of (movies | async)" [movie]="movie" />
+      </div>
+    </cdk-virtual-scroll-viewport>
+  </ng-template>
+</div>

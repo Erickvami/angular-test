@@ -5,35 +5,31 @@ import { SharedPageModule } from '../../shared/shared-page.module';
 import { MovieCardComponent } from "../../components/movie-card/movie-card.component";
 import { Subscription } from 'rxjs';
 import { ScrollingModule } from '@angular/cdk/scrolling'
+import { MovieListComponent } from "../../components/movie-list/movie-list.component";
+import { MoviesState } from '../../store/movies/movies.state';
+import { Store } from '@ngrx/store';
+import { loadMovies } from '../../store/movies/movies.actions';
+import { MoviesModule } from '../../store/movies/movies.module';
 
 @Component({
   selector: 'app-movies',
   standalone: true,
-  imports: [SharedPageModule, MovieCardComponent, ScrollingModule],
+  imports: [SharedPageModule, MovieCardComponent, ScrollingModule, MovieListComponent, MoviesModule],
   templateUrl: './movies.component.html',
   styleUrls: ['./movies.component.scss']
 })
 export class MoviesComponent implements OnInit, OnDestroy {
   movies?: Movie[] = [];
-  moviesSub?: Subscription;
-  constructor(private moviesService: MoviesService) {
-
+  subscription?: Subscription;
+  constructor(private store: Store) {
+    console.log(store)
   }
 
   ngOnInit(): void {
-    this.moviesSub = this.moviesService.getAllMovies().subscribe({
-      next: movies => this.movies = movies,
-      error: e => {
-        if (e?.error?.cause?.code === 'DEPTH_ZERO_SELF_SIGNED_CERT') {
-          console.warn('Invalid SSL certify from API');
-          return;
-        }
-        console.error(e);
-      }
-    })
+    this.store.dispatch(loadMovies());
   }
 
   ngOnDestroy(): void {
-    if (this.moviesSub) this.moviesSub.unsubscribe();
+    if (this.subscription) this.subscription.unsubscribe();
   }
 }

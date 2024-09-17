@@ -15,11 +15,11 @@ export const routes: Routes = [
           },
           {
             path: 'movies',
-            component: MoviesComponent
+            loadChildren: () => import('./pages/movies/movies-routing.module').then(m => m.MoviesRoutingModule)
           },
           {
-            path: 'movies/:id',
-            component: MovieDetailsComponent
+            path: '**',
+            redirectTo: '/movies'
           }
         ]
     },

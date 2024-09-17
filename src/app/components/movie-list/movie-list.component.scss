@@ -1,0 +1,15 @@
+.movie-list {
+  width: 60vw;
+  align-self: center;
+  &-container {
+    height: 85vh;
+    width: 100%;
+    overflow: auto;
+
+    &-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 10px;
+    }
+  }
+}
