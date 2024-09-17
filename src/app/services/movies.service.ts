@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { catchError, Observable, of, tap } from 'rxjs';
 import { Movie } from '../models/movie.model';
 import { environment } from '../../environments/environment';
+import { MoviesStore } from '../store/movies/movies.store';
+import { error } from 'console';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +12,7 @@ import { environment } from '../../environments/environment';
 export class MoviesService {
   private apiUrl = `${environment.apiUrl}/movies`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,) {}
 
   getAllMovies(): Observable<Movie[]> {
     return this.http.get<Movie[]>(this.apiUrl);

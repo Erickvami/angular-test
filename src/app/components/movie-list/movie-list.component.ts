@@ -5,28 +5,32 @@ import { SharedModule } from '../../shared/shared.module';
 import { Movie } from '../../models/movie.model';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { selectAllMovies, selectMoviesLoading } from '../../store/movies/movies.selectors';
-import { MoviesModule } from '../../store/movies/movies.module';
+import { MoviesService } from '../../services/movies.service';
+import { MoviesQuery } from '../../store/movies/movies.query';
+import { MatCardLgImage } from '@angular/material/card';
 
 @Component({
   selector: 'app-movie-list',
   standalone: true,
-  imports: [SharedModule, MovieCardComponent, ScrollingModule, MoviesModule],
+  imports: [SharedModule, MovieCardComponent, ScrollingModule],
   templateUrl: './movie-list.component.html',
   styleUrl: './movie-list.component.scss'
 })
 export class MovieListComponent implements OnInit, OnDestroy {
   movies: Observable<Movie[]>;
-  loading: Observable<boolean>;
+  error: Observable<string | null>;
+  loading: Observable<boolean>
 
-  constructor(private store: Store) {
-    this.movies = this.store.select(selectAllMovies);
-    this.loading = this.store.select(selectMoviesLoading);
+  constructor(private movieQuery: MoviesQuery) {
+    this.movies = this.movieQuery.selectMovies();
+    this.error = this.movieQuery.selectError();
+    this.loading = this.movieQuery.selectLoading();
   }
 
   ngOnInit(): void {
 
   }
+
   ngOnDestroy(): void {
 
   }

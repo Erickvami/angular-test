@@ -3,30 +3,35 @@ import { Movie } from '../../models/movie.model';
 import { MoviesService } from '../../services/movies.service';
 import { SharedPageModule } from '../../shared/shared-page.module';
 import { MovieCardComponent } from "../../components/movie-card/movie-card.component";
-import { Subscription } from 'rxjs';
+import { catchError, Subscription, tap } from 'rxjs';
 import { ScrollingModule } from '@angular/cdk/scrolling'
 import { MovieListComponent } from "../../components/movie-list/movie-list.component";
-import { MoviesState } from '../../store/movies/movies.state';
-import { Store } from '@ngrx/store';
-import { loadMovies } from '../../store/movies/movies.actions';
-import { MoviesModule } from '../../store/movies/movies.module';
+import { Store, StoreModule } from '@ngrx/store';
+import { MoviesStore } from '../../store/movies/movies.store';
+import { error } from 'console';
 
 @Component({
   selector: 'app-movies',
   standalone: true,
-  imports: [SharedPageModule, MovieCardComponent, ScrollingModule, MovieListComponent, MoviesModule],
+  imports: [
+    SharedPageModule,
+    MovieListComponent,
+  ],
   templateUrl: './movies.component.html',
   styleUrls: ['./movies.component.scss']
 })
 export class MoviesComponent implements OnInit, OnDestroy {
-  movies?: Movie[] = [];
   subscription?: Subscription;
-  constructor(private store: Store) {
-    console.log(store)
+  constructor(private moviesService: MoviesService, private store: MoviesStore) {
+
   }
 
   ngOnInit(): void {
-    this.store.dispatch(loadMovies());
+    this.store.update({data: [], loading: true, error: null})
+    this.moviesService.getAllMovies().subscribe({
+      next: data => this.store.update({ data, loading: false, error: null }),
+      error: error => this.store.update({data: [], loading: false, error: error?.message})
+    });
   }
 
   ngOnDestroy(): void {
